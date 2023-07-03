@@ -21,7 +21,7 @@ export function getGradationColors(
   end: string,
   interval: number
 ) {
-  // 颜色要是整数, 步长最多255
+  // 颜色要是整数, 步长最多256
   interval = Math.min(interval, 256);
   const [startR, startG, startB] = getRgbColor(start);
   const [endR, endG, endB] = getRgbColor(end);
@@ -57,20 +57,13 @@ function parseValue(value: string, defaultValue: number) {
 export function getRangeProps(range: HTMLInputElement) {
   const min = parseValue(range.min, 0);
   const max = parseValue(range.max, 100);
-  const calculateStep = () => {
-    // 没有设置step时
-    if (range.step === "any") {
-      return 0.01;
-    }
 
-    const step = Number(range.step);
+  if (range.step === "any") {
+    return [min, max, 100];
+  }
 
-    return isNaN(step) || step <= 0 ? 1 : step;
-  };
+  const step = Number(range.step);
+  const interval = isNaN(step) || step <= 0 ? 1 : step;
 
-  return {
-    min,
-    max,
-    interval: Math.ceil((max - min) / calculateStep()),
-  };
+  return [min, max, Math.ceil((max - min) / interval)];
 }

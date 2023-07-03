@@ -5,9 +5,8 @@ const box = document.querySelector(".box") as HTMLDivElement;
 
 const { width: rangeWidth } = range.getBoundingClientRect();
 const { width: boxWidth } = box.getBoundingClientRect();
-const { min, max, interval } = getRangeProps(range);
-
-const colors = getGradationColors("green", "yellow", interval);
+const [min, max, steps] = getRangeProps(range);
+const colors = getGradationColors("green", "yellow", steps);
 
 function changeBoxStyle() {
   const { value } = range;
